@@ -46,7 +46,31 @@ class Camera{
     
     setModelMatrix(mm){
     	this.modelMatrix = mm;
-    }    
+    }
+	moveX(move) {
+		this.vrp[0] += move;
+		this.updateCameraMatrix();
+	}
+	moveY(move) {
+		this.vrp[2] += move;
+		this.updateCameraMatrix();
+	}
+	moveZ(move) {
+		this.vrp[1] += move;
+		this.updateCameraMatrix();
+	}
+	lookVertical(look) {
+		var angleRads = look * (Math.PI/180);
+		this.v = normalize(subtract(mult(Math.cos(angleRads), this.v), mult(Math.sin(angleRads), this.n)));
+		this.n = normalize(add(mult(Math.sin(angleRads), this.v), mult(Math.cos(angleRads), this.n)));
+		this.updateCameraMatrix();
+	}
+	lookHorizontal(look) {
+		var angleRads = look * (Math.PI/180);
+		this.u = normalize(subtract(mult(Math.cos(angleRads), this.u), mult(Math.sin(angleRads), this.n)));
+		this.n = normalize(add(mult(Math.sin(angleRads), this.u), mult(Math.cos(angleRads), this.n)));
+		this.updateCameraMatrix();
+	}
 }
 
 var camera1 = new Camera(vec3(0,5,0), vec3(1,0,0), vec3(0,0,-1), vec3(0,1,0));
@@ -114,6 +138,43 @@ window.onload = function init(){
     
     render();
 };
+
+window.addEventListener("keydown", moveCamera);
+function moveCamera(event) {
+	switch(event.code) {
+		case "KeyW":
+			camera1.moveZ(-0.3);
+			break;
+		case "KeyS":
+			camera1.moveZ(0.3);
+			break;
+		case "KeyA":
+			camera1.moveX(-0.3);
+			break;
+		case "KeyD":
+			camera1.moveX(0.3);
+			break;
+		case "ArrowLeft":
+			camera1.lookHorizontal(1);
+			break;
+		case "ArrowRight":
+			camera1.lookHorizontal(-1);
+			break;
+		case "ArrowUp":
+			camera1.lookVertical(-1);
+			break;
+		case "ArrowDown":
+			camera1.lookVertical(1);
+			break;
+		case "ShiftLeft":
+			camera1.moveY(0.3);
+			break;
+		case "Space":
+			camera1.moveY(-0.3);
+			break;
+	}
+}
+
 
 function render(){
     setTimeout(function(){
