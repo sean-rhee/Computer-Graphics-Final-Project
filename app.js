@@ -71,6 +71,17 @@ class Camera{
 		this.n = normalize(add(mult(Math.sin(angleRads), this.u), mult(Math.cos(angleRads), this.n)));
 		this.updateCameraMatrix();
 	}
+	roll(roll) {
+		// var angle = radians(amount);
+		// var vp = subtract(mult(Math.cos(angle),this.v), mult(Math.sin(angle),this.u));
+		// var up = add(mult(Math.sin(angle),this.v), mult(Math.cos(angle),this.u));
+		// this.v = normalize(vp);
+		// this.u = normalize(up);
+		var angleRads = roll * (Math.PI/180);
+		this.v = normalize(subtract(mult(Math.cos(angleRads), this.v), mult(Math.sin(angleRads), this.u)));
+		this.u = normalize(add(mult(Math.sin(angleRads), this.v), mult(Math.cos(angleRads), this.u)));
+		this.updateCameraMatrix();
+	}
 }
 
 var camera1 = new Camera(vec3(0,5,0), vec3(1,0,0), vec3(0,0,-1), vec3(0,1,0));
@@ -171,6 +182,12 @@ function moveCamera(event) {
 			break;
 		case "Space":
 			camera1.moveY(-0.3);
+			break;
+		case "KeyZ":
+			camera1.roll(-1);
+			break;
+		case "KeyX":
+			camera1.roll(1);
 			break;
 	}
 }
