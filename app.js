@@ -124,7 +124,8 @@ class Drawable{
 
 var tri;
 var skybox;
-var creepyWall1, creepyWall2;
+var creepyWall1, creepyWall2, creepyWall3, creepyWall4;
+var door1, door2;
 
 window.onload = function init(){
     canvas = document.getElementById( "gl-canvas" );
@@ -144,8 +145,12 @@ window.onload = function init(){
     var shine = 100.0
     tri = new Plane(pos[0],pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 	skybox = new Skybox(pos[0],pos[1]+5,pos[2],scale+3,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
-	creepyWall1 = new CreepyWall(pos[0],pos[1],pos[2],scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	creepyWall2 = new CreepyWall(pos[0]+2,pos[1],pos[2]+2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine)
+	creepyWall1 = new CreepyWall(pos[0]-1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	creepyWall2 = new CreepyWall(pos[0]+1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	creepyWall3 = new CreepyWall(pos[0]+1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	creepyWall4 = new CreepyWall(pos[0]-1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	door1 = new Door3D(pos[0]-1,pos[1],pos[2]+.5,scale,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	door2 = new Door3D(pos[0]+1,pos[1],pos[2]+.5,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
     
     render();
 };
@@ -203,6 +208,10 @@ function render(){
 		gl.enable(gl.DEPTH_TEST);
 		creepyWall1.draw();
 		creepyWall2.draw();
+		door1.draw();
+		door2.draw();
+		creepyWall3.draw();
+		creepyWall4.draw();
     }, 100 );  //10fps
 }
 

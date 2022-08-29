@@ -76,7 +76,7 @@ class Plane extends Drawable {
 
         }
 
-        image.src = "256x grass block.png";
+        image.src = "tile.jpg";
     }
 
     constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {

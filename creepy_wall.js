@@ -13,6 +13,8 @@ class CreepyWall extends Drawable {
         vec2(0, 1),
     ];
 
+    vertexNormals = []
+
     static indices = [
         0, 1, 2,
         0, 2, 3
@@ -21,10 +23,12 @@ class CreepyWall extends Drawable {
     static positionBuffer = -1;
     static textureCoordBuffer = -1;
     static indexBuffer = -1;
+    static normalBuffer = -1;
 
     static shaderProgram = -1;
     static aPositionShader = -1;
     static aTextureCoordShader = -1;
+    static aNormalShader = -1;
 
     static uModelMatrixShader = -1;
     static uCameraMatrixShader = -1;
@@ -33,8 +37,54 @@ class CreepyWall extends Drawable {
     static texture = -1;
     static uTextureUnitShader = -1;
 
+    // static uMatAmbientShader = -1;
+    // static uMatDiffuseShader = -1;
+    // static uMatSpecularShader = -1;
+    // static uMatAlphaShader = -1;
+
+    // static uLightDirectionShader = -1;
+    // static uLightStatusShader = -1;
+    // static uLightAmbientShader = -1;
+    // static uLightDiffuseShader = -1;
+    // static uLightSpecularShader = -1;
+    // static uLightAlphaShader = -1;
+    // static uLightCutoffShader = -1;
+
+    // static computeNormals() {
+    //     var normalSum = [];
+    //     var counts = [];
+
+    //     //initialize sum of normals for each vertex and how often its used.
+    //     for (var i = 0; i < CreepyWall.vertexPositions.length; i++) {
+    //         normalSum.push(vec3(0, 0, 0));
+    //         counts.push(0);
+    //     }
+
+    //     //for each triangle
+    //     for (var i = 0; i < CreepyWall.indices.length; i += 3) {
+    //         var a = CreepyWall.indices[i];
+    //         var b = CreepyWall.indices[i + 1];
+    //         var c = CreepyWall.indices[i + 2];
+
+    //         var edge1 = subtract(CreepyWall.vertexPositions[b], CreepyWall.vertexPositions[a]);
+    //         var edge2 = subtract(CreepyWall.vertexPositions[c], CreepyWall.vertexPositions[b]);
+    //         var N = cross(edge1, edge2);
+
+    //         normalSum[a] = add(normalSum[a], normalize(N));
+    //         counts[a]++;
+    //         normalSum[b] = add(normalSum[b], normalize(N));
+    //         counts[b]++;
+    //         normalSum[c] = add(normalSum[c], normalize(N));
+    //         counts[c]++;
+    //     }
+
+    //     for (var i = 0; i < CreepyWall.vertexPositions.length; i++)
+    //         this.vertexNormals[i] = mult(1.0 / counts[i], normalSum[i]);
+    // }
+
 
     static initialize() {
+        // CreepyWall.computeNormals();
         CreepyWall.shaderProgram = initShaders(gl, "/vshader.glsl", "/fshader.glsl");
 
         // Load the data into the GPU
@@ -47,6 +97,9 @@ class CreepyWall extends Drawable {
         gl.bufferData(gl.ARRAY_BUFFER, flatten(CreepyWall.vertexTextureCoords), gl.STATIC_DRAW);
         CreepyWall.uTextureUnitShader = gl.getUniformLocation(CreepyWall.shaderProgram, "uTextureUnit");
 
+        // CreepyWall.normalBuffer = gl.createBuffer();
+        // gl.bindBuffer(gl.ARRAY_BUFFER, CreepyWall.normalBuffer);
+        // gl.bufferData(gl.ARRAY_BUFFER, flatten(CreepyWall.vertexNormals), gl.STATIC_DRAW);
 
         CreepyWall.indexBuffer = gl.createBuffer();
         gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, CreepyWall.indexBuffer);
@@ -59,6 +112,19 @@ class CreepyWall extends Drawable {
         CreepyWall.uModelMatrixShader = gl.getUniformLocation(CreepyWall.shaderProgram, "modelMatrix");
         CreepyWall.uCameraMatrixShader = gl.getUniformLocation(CreepyWall.shaderProgram, "cameraMatrix");
         CreepyWall.uProjectionMatrixShader = gl.getUniformLocation(CreepyWall.shaderProgram, "projectionMatrix");
+
+        // CreepyWall.uMatAmbientShader = gl.getUniformLocation(CreepyWall.shaderProgram, "matAmbient");
+        // CreepyWall.uMatDiffuseShader = gl.getUniformLocation(CreepyWall.shaderProgram, "matDiffuse");
+        // CreepyWall.uMatSpecularShader = gl.getUniformLocation(CreepyWall.shaderProgram,"matSpecular");
+        // CreepyWall.uMatAlphaShader = gl.getUniformLocation(CreepyWall.shaderProgram,"matAlpha");
+        // CreepyWall.uLightDirectionShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightDirection");
+        // CreepyWall.uLightAlphaShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightAlpha");
+        // CreepyWall.uLightCutoffShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightCutoff");
+        // CreepyWall.uLightStatusShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightStatus");
+        // CreepyWall.uLightAmbientShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightAmbient");
+        // CreepyWall.uLightDiffuseShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightDiffuse");
+        // CreepyWall.uLightSpecularShader = gl.getUniformLocation(CreepyWall.shaderProgram,"lightSpecular");
+        // CreepyWall.uLight1DirectionShader = gl.getUniformLocation(CreepyWall.shaderProgram,"light1Direction");
 
     }
 
