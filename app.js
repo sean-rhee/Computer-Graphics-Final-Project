@@ -123,6 +123,8 @@ class Drawable{
 }
 
 var tri;
+var skybox;
+var creepyWall1, creepyWall2;
 
 window.onload = function init(){
     canvas = document.getElementById( "gl-canvas" );
@@ -141,6 +143,9 @@ window.onload = function init(){
     var spec = vec4(1.0,1.0,1.0,1.0);
     var shine = 100.0
     tri = new Plane(pos[0],pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	skybox = new Skybox(pos[0],pos[1]+5,pos[2],scale+3,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
+	creepyWall1 = new CreepyWall(pos[0],pos[1],pos[2],scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	creepyWall2 = new CreepyWall(pos[0]+2,pos[1],pos[2]+2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine)
     
     render();
 };
@@ -193,6 +198,11 @@ function render(){
 	requestAnimationFrame(render);
     	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
         tri.draw();
+		gl.disable(gl.DEPTH_TEST);
+		skybox.draw();
+		gl.enable(gl.DEPTH_TEST);
+		creepyWall1.draw();
+		creepyWall2.draw();
     }, 100 );  //10fps
 }
 

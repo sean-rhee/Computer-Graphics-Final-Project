@@ -92,7 +92,8 @@ class Plane extends Drawable {
                 Plane.indices.push(i);
             }
             console.log(Plane.vertexPositions);
-            console.log(Plane.vertexTextureCoords)
+            console.log(Plane.vertexTextureCoords);
+            console.log(Plane.indices);
             Plane.initialize()
             Plane.initializeTexture();
         }
@@ -125,8 +126,6 @@ class Plane extends Drawable {
             Plane.vertexPositions.push(c);
             Plane.vertexPositions.push(d);
             Plane.vertexPositions.push(a);
-
-            
         }
         //Triangle #1
         Plane.vertexTextureCoords.push(vec2(0.0, 0.0));
@@ -163,7 +162,7 @@ class Plane extends Drawable {
 
         gl.enableVertexAttribArray(Plane.aPositionShader);
         gl.enableVertexAttribArray(Plane.aTextureCoordShader);
-        //gl.drawElements(gl.TRIANGLES, Plane.indices.length, gl.UNSIGNED_BYTE, 0);
+        // gl.drawElements(gl.TRIANGLES, Plane.indices.length, gl.UNSIGNED_BYTE, 0);
         gl.drawArrays(gl.TRIANGLES, 0, Plane.vertexPositions.length);
         gl.disableVertexAttribArray(Plane.aPositionShader);
         gl.disableVertexAttribArray(Plane.aTextureCoordShader);
