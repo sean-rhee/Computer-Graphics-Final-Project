@@ -79,7 +79,7 @@ class Camera{
 	}
 }
 
-var camera1 = new Camera(vec3(0,5,0), vec3(1,0,0), vec3(0,0,-1), vec3(0,1,0));
+var camera1 = new Camera(vec3(0,2,5), vec3(1,0,0), vec3(0,1,0), vec3(0,0,1));
 var light1 = new Light(vec3(0,0,0),vec3(0,1,-1),vec4(0.4,0.4,0.4,1.0), vec4(1,1,1,1), vec4(1,1,1,1),0,0,1);
 
 class Drawable{
@@ -149,10 +149,10 @@ window.addEventListener("keydown", moveCamera);
 function moveCamera(event) {
 	switch(event.code) {
 		case "KeyW":
-			camera1.moveZ(-0.3);
+			camera1.moveY(-0.3);
 			break;
 		case "KeyS":
-			camera1.moveZ(0.3);
+			camera1.moveY(0.3);
 			break;
 		case "KeyA":
 			camera1.moveX(-0.3);
@@ -173,10 +173,10 @@ function moveCamera(event) {
 			camera1.lookVertical(1);
 			break;
 		case "ShiftLeft":
-			camera1.moveY(0.3);
+			camera1.moveZ(-0.3);
 			break;
 		case "Space":
-			camera1.moveY(-0.3);
+			camera1.moveZ(0.3);
 			break;
 		case "KeyZ":
 			camera1.roll(-1);
