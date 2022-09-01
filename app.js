@@ -123,6 +123,7 @@ class Drawable{
 }
 
 var tri;
+var subdividedPlane;
 var skybox;
 var creepyWall1, creepyWall2, creepyWall3, creepyWall4;
 var door1, door2;
@@ -145,7 +146,14 @@ window.onload = function init(){
     var shine = 100.0
     tri = new Plane(pos[0],pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 	skybox = new Skybox(pos[0],pos[1]+5,pos[2],scale+3,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
-
+	
+	//Messy lighting room LOL
+	subdividedPlane = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-3,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	subdividedPlane2 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-2,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	subdividedPlane3 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-4,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	subdividedPlane4 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-5,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	subdividedPlane5 = new SubdividedPlane(pos[0]+8.75,pos[1]+.1,pos[2]+5.5,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
+	subdividedPlane6 = new SubdividedPlane(pos[0]+8.75,pos[1]+.1,pos[2]+4,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
 
 	//Left Walls
 	LeftDoorLeftWall = new CreepyWall(pos[0]-1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
@@ -220,6 +228,13 @@ function render(){
 		gl.disable(gl.DEPTH_TEST);
 		skybox.draw();
 		gl.enable(gl.DEPTH_TEST);
+
+		subdividedPlane.draw();
+		subdividedPlane2.draw();
+		subdividedPlane3.draw();
+		subdividedPlane4.draw();
+		subdividedPlane5.draw();
+		subdividedPlane6.draw();
 
 		door1.draw();
 		door2.draw();
