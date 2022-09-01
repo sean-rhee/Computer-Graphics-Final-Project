@@ -60,98 +60,105 @@ class Camera{
 		this.updateCameraMatrix();
 	}
 	lookVertical(look) {
-		var angleRads = look * (Math.PI/180);
+		var angleRads = look * (Math.PI / 180);
 		this.v = normalize(subtract(mult(Math.cos(angleRads), this.v), mult(Math.sin(angleRads), this.n)));
 		this.n = normalize(add(mult(Math.sin(angleRads), this.v), mult(Math.cos(angleRads), this.n)));
 		this.updateCameraMatrix();
 	}
 	lookHorizontal(look) {
-		var angleRads = look * (Math.PI/180);
+		var angleRads = look * (Math.PI / 180);
 		this.u = normalize(subtract(mult(Math.cos(angleRads), this.u), mult(Math.sin(angleRads), this.n)));
 		this.n = normalize(add(mult(Math.sin(angleRads), this.u), mult(Math.cos(angleRads), this.n)));
 		this.updateCameraMatrix();
 	}
 	roll(roll) {
-		var angleRads = roll * (Math.PI/180);
+		var angleRads = roll * (Math.PI / 180);
 		this.v = normalize(subtract(mult(Math.cos(angleRads), this.v), mult(Math.sin(angleRads), this.u)));
 		this.u = normalize(add(mult(Math.sin(angleRads), this.v), mult(Math.cos(angleRads), this.u)));
 		this.updateCameraMatrix();
 	}
 }
 
-var camera1 = new Camera(vec3(0,2,5), vec3(1,0,0), vec3(0,1,0), vec3(0,0,1));
-var light1 = new Light(vec3(0,0,0),vec3(0,1,-1),vec4(0.4,0.4,0.4,1.0), vec4(1,1,1,1), vec4(1,1,1,1),0,0,1);
+var camera1 = new Camera(vec3(0, 2, 5), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1));
+var camera2 = new Camera(vec3(-4.5, 3.5, 3), normalize(vec3(1, 0, 1)), normalize(vec3(0, 1, -1)), vec3(0, 0, 1));
+// var light1 = new Light(vec3(0, 0, 0), vec3(0, 1, -1), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 0, 0, 1);
+var light1 = new Light(vec3(10, 0, 0), vec3(-1, 0, 0), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 0), 0, 0, 1);
+var light2 = new Light(vec3(0, 2, 5), normalize(vec3(0, -1, -1)), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 15, (30 * Math.PI) / 180,1);
 
-class Drawable{
-    constructor(tx,ty,tz,scale,rotX, rotY, rotZ, amb, dif, sp, sh){
-    	this.tx = tx;
-    	this.ty = ty;
-    	this.tz = tz;
-    	this.scale = scale;
-    	this.modelRotationX = rotX;
-    	this.modelRotationY = rotY;
-    	this.modelRotationZ = rotZ;
-    	this.updateModelMatrix();
-    	
-    	this.matAmbient = amb;
-    	this.matDiffuse = dif;
-    	this.matSpecular = sp;
-    	this.matAlpha = sh;
-    	
-    	
-    }
-    	
-    updateModelMatrix(){
-        let t = translate(this.tx, this.ty, this.tz);		     
-	   		     
-    	let s = scale(this.scale,this.scale,this.scale);
-    	
-    	let rx = rotateX(this.modelRotationX);
-    	let ry = rotateY(this.modelRotationY);
-    	let rz = rotateZ(this.modelRotationZ);
-	
-	this.modelMatrix = mult(t,mult(s,mult(rz,mult(ry,rx))));
-    }
-    
-    getModelMatrix(){
-    	return this.modelMatrix;
-    }
-    
-    setModelMatrix(mm){
-    	this.modelMatrix = mm;
-    }    
+class Drawable {
+	constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
+		this.tx = tx;
+		this.ty = ty;
+		this.tz = tz;
+		this.scale = scale;
+		this.modelRotationX = rotX;
+		this.modelRotationY = rotY;
+		this.modelRotationZ = rotZ;
+		this.updateModelMatrix();
+
+		this.matAmbient = amb;
+		this.matDiffuse = dif;
+		this.matSpecular = sp;
+		this.matAlpha = sh;
+
+
+	}
+
+	updateModelMatrix() {
+		let t = translate(this.tx, this.ty, this.tz);
+
+		let s = scale(this.scale, this.scale, this.scale);
+
+		let rx = rotateX(this.modelRotationX);
+		let ry = rotateY(this.modelRotationY);
+		let rz = rotateZ(this.modelRotationZ);
+
+		this.modelMatrix = mult(t, mult(s, mult(rz, mult(ry, rx))));
+	}
+
+	getModelMatrix() {
+		return this.modelMatrix;
+	}
+
+	setModelMatrix(mm) {
+		this.modelMatrix = mm;
+	}
 }
 
 var tri;
+var subdividedPlane;
 var skybox;
+var creepyWall1, creepyWall2, creepyWall3, creepyWall4;
 var door1, door2;
+var cylinder;
 
-window.onload = function init(){
-    canvas = document.getElementById( "gl-canvas" );
-    gl = canvas.getContext('webgl2');
-    if ( !gl ) { alert( "WebGL 2.0 isn't available" ); }
+window.onload = function init() {
+	canvas = document.getElementById("gl-canvas");
+	gl = canvas.getContext('webgl2');
+	if (!gl) { alert("WebGL 2.0 isn't available"); }
 
     gl.viewport( 0, 0, canvas.width, canvas.height );
     gl.clearColor( 0.0, 0.0, 0.0, 1.0 );
     gl.enable(gl.DEPTH_TEST);
 
-    var pos = vec3(0,0,0);
-    var rot = vec3(0,0,0);
-    var scale = 1.0;
-    var amb = vec4(0.2,0.2,0.2,1.0);
-    var dif = vec4(0.6,0.1,0.0,1.0);
-    var spec = vec4(1.0,1.0,1.0,1.0);
-    var shine = 100.0
-    tri = new Plane(pos[0],pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	skybox = new Skybox(pos[0],pos[1]+5,pos[2],scale+3,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
-	
-	//Messy lighting room LOL
-	subdividedPlane = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-3,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	subdividedPlane2 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-2,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	subdividedPlane3 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-4,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	subdividedPlane4 = new SubdividedPlane(pos[0]+6,pos[1]+.1,pos[2]-5,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
-	subdividedPlane5 = new SubdividedPlane(pos[0]+8.75,pos[1]+.1,pos[2]+5.5,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
-	subdividedPlane6 = new SubdividedPlane(pos[0]+8.75,pos[1]+.1,pos[2]+4,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
+	var pos = vec3(0, 0, 0);
+	var rot = vec3(0, 0, 0);
+	var scale = 1.0;
+	var amb = vec4(0.5, 0.5, 0.5, 1.0);
+	var dif = vec4(0.5, 0.5, 0.2, 1.0);
+	var spec = vec4(0.5, 1.0, 1.0, 1.0);
+	var shine = 100.0
+	tri = new Plane(pos[0], pos[1], pos[2], scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+	skybox = new Skybox(pos[0], pos[1] + 5, pos[2], scale + 3, rot[0] + 90, rot[1], rot[2], amb, dif, spec, shine);
+	cylinder = new Cylinder(pos[0], pos[1] + 5, pos[2], scale*.1, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+
+	//Messy lighting LOL
+	subdividedPlane = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] , scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	subdividedPlane2 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 2, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	subdividedPlane3 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 3, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	// subdividedPlane4 = new SubdividedPlane(pos[0] + 6, pos[1] + .1, pos[2] - 5, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+	// subdividedPlane5 = new SubdividedPlane(pos[0] + 8.75, pos[1] + .1, pos[2] + 5.5, scale, rot[0], rot[1] - 90, rot[2], amb, dif, spec, shine);
+	// subdividedPlane6 = new SubdividedPlane(pos[0] + 8.75, pos[1] + .1, pos[2] + 4, scale, rot[0], rot[1] - 90, rot[2], amb, dif, spec, shine);
 
 	//Left Walls
 	LeftDoorLeftWall = new CreepyWall(pos[0]-1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
@@ -180,66 +187,145 @@ window.onload = function init(){
     render();
 };
 
+var currentCamera = 1;
+var tempCamera;
+
 window.addEventListener("keydown", moveCamera);
 function moveCamera(event) {
-	switch(event.code) {
-		case "KeyW":
-			camera1.moveY(-0.3);
-			break;
-		case "KeyS":
-			camera1.moveY(0.3);
-			break;
-		case "KeyA":
-			camera1.moveX(-0.3);
-			break;
-		case "KeyD":
-			camera1.moveX(0.3);
-			break;
-		case "ArrowLeft":
-			camera1.lookHorizontal(2);
-			break;
-		case "ArrowRight":
-			camera1.lookHorizontal(-2);
-			break;
-		case "ArrowUp":
-			camera1.lookVertical(-2);
-			break;
-		case "ArrowDown":
-			camera1.lookVertical(2);
-			break;
-		case "ShiftLeft":
-			camera1.moveZ(-0.3);
-			break;
-		case "Space":
-			camera1.moveZ(0.3);
-			break;
-		case "KeyZ":
-			camera1.roll(-1);
-			break;
-		case "KeyX":
-			camera1.roll(1);
-			break;
+	// console.log(event.code)
+	if (currentCamera == 1) {
+		switch (event.code) {
+			case "KeyW":
+				camera1.moveY(-0.3);
+				break;
+			case "KeyS":
+				camera1.moveY(0.3);
+				break;
+			case "KeyA":
+				camera1.moveX(-0.3);
+				break;
+			case "KeyD":
+				camera1.moveX(0.3);
+				break;
+			case "ArrowLeft":
+				camera1.lookHorizontal(2);
+				break;
+			case "ArrowRight":
+				camera1.lookHorizontal(-2);
+				break;
+			case "ArrowUp":
+				camera1.lookVertical(-2);
+				break;
+			case "ArrowDown":
+				camera1.lookVertical(2);
+				break;
+			case "ShiftLeft":
+				camera1.moveZ(-0.3);
+				break;
+			case "Space":
+				camera1.moveZ(0.3);
+				break;
+			case "KeyZ":
+				camera1.roll(-1);
+				break;
+			case "KeyX":
+				camera1.roll(1);
+				break;
+			case "Enter":
+				if (currentCamera == 1) {
+					currentCamera = 2;
+					tempCamera = camera1;
+					camera1 = camera2;
+				}
+				else {
+					currentCamera = 1;
+					camera2 = camera1;
+					camera1 = tempCamera;
+				}
+		}
+	}
+	else {
+		if (event.code == "Enter") {
+			if (currentCamera == 1) {
+				currentCamera = 2;
+				tempCamera = camera1;
+				camera1 = camera2;
+			}
+			else {
+				currentCamera = 1;
+				camera2 = camera1;
+				camera1 = tempCamera;
+			}
+		}
 	}
 }
 
+var sunX = 4;
+var sunY = 1;
+var day = true;
+var rise = true;
 
 var theta = 0 
 function render(){
 	theta += .5;
     setTimeout(function(){
 	requestAnimationFrame(render);
+		if (day) {
+			sunX -= 1;
+			sunY += 1;
+			if (sunX == 0) {
+				day = false;
+			}
+		}
+		else {
+			sunX += 1;
+			sunY += 1;
+			if (sunX >= 4) {
+				day = true;
+				sunY = 1;
+			}
+		}
+		var sunPos = vec3(sunX*20, sunY*20, 0);
+		switch (sunY) {
+			case 1:
+				light1.direction = vec3(-1*20, 0, 0);
+				break;
+			case 2:
+				light1.direction = vec3(-1*20, -1*20, 0);
+				break;
+			case 3:
+				light1.direction = vec3(0, -1*20, 0);
+				break;
+			case 4:
+				light1.direction = vec3(1*20, -1*20, 0);
+				break;
+			case 5:
+				light1.direction = vec3(1*20, 0, 0);
+				break;
+			case 6:
+				light1.direction = vec3(1*20, 1*20, 0);
+				break;
+			case 7:
+				light1.direction = vec3(0, 1*20, 0);
+				break;
+			case 8:
+				light1.direction = vec3(-1*20, 1*20, 0);
+				break;
+
+		}
+		light1.location = sunPos;
     	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        tri.draw();
+        // tri.draw();
 		gl.disable(gl.DEPTH_TEST);
 		skybox.draw();
 		gl.enable(gl.DEPTH_TEST);
 
 		subdividedPlane.draw();
-		subdividedPlane2.draw();
-		subdividedPlane3.draw();
-		subdividedPlane4.draw();
-		subdividedPlane5.draw();
-		subdividedPlane6.draw();
+		// subdividedPlane2.draw();
+		// subdividedPlane3.draw();
+		// subdividedPlane4.draw();
+		// subdividedPlane5.draw();
+		// subdividedPlane6.draw();
 
 		door1.draw();
 		door2.draw();
@@ -248,6 +334,8 @@ function render(){
 
 		cow.modelRotationY = theta;
 		cow.updateModelMatrix();
+
+		cylinder.draw();
 
 		RightLeftWall.draw();
 		RightRightWall.draw();
