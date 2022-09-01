@@ -154,9 +154,9 @@ window.onload = function init() {
 	cylinder = new Cylinder(pos[0]+3, pos[1] + 1, pos[2], scale*.1, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 
 	//Messy lighting LOL
-	subdividedPlane = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] , scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
-	subdividedPlane2 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 2, scale*.2, rot[0], rot[1]+45, rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
-	subdividedPlane3 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 3, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	subdividedPlane = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] , scale*.2, rot[0], rot[1], rot[2], vec4(0.5, 0.5, 0.5, 1.0), vec4(0.5, 0.5, 0.2, 1.0), vec4(0.5, 0.5, 0.5, 0.5), 1);
+	// subdividedPlane2 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 2, scale*.2, rot[0], rot[1]+45, rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	// subdividedPlane3 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 3, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
 	// subdividedPlane4 = new SubdividedPlane(pos[0] + 6, pos[1] + .1, pos[2] - 5, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 	// subdividedPlane5 = new SubdividedPlane(pos[0] + 8.75, pos[1] + .1, pos[2] + 5.5, scale, rot[0], rot[1] - 90, rot[2], amb, dif, spec, shine);
 	// subdividedPlane6 = new SubdividedPlane(pos[0] + 8.75, pos[1] + .1, pos[2] + 4, scale, rot[0], rot[1] - 90, rot[2], amb, dif, spec, shine);
