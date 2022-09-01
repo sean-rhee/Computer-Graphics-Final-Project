@@ -179,6 +179,7 @@ window.onload = function init() {
 	BackWall = new CreepyWall(pos[0],pos[1],pos[2]-4,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 
 	cow = new Cow3D(pos[0]-3,pos[1]+1,pos[2]+1,3,0,0,0,"./cow")
+	teddybear = new TeddyBear3D(pos[0]-.25,pos[1]+1.5,pos[2]-10,.05,0,0,0,"./teddybear")
 
 	door1 = new Door3D(pos[0]-1,pos[1],pos[2]+.5,scale,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
 	door2 = new Door3D(pos[0]+1,pos[1],pos[2]+.5,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
@@ -265,7 +266,8 @@ var sunY = 1;
 var day = true;
 var rise = true;
 
-var theta = 0 
+var theta = 0
+var teddy = -10 
 function render(){
 	theta += .5;
     setTimeout(function(){
@@ -351,6 +353,20 @@ function render(){
 		LeftLeftWall.draw();
 		LeftRoof.draw();
 		BackWall.draw();
+
+		console.log("vrp", camera1.vrp)
+		console.log("u", camera1.u)
+		console.log("v", camera1.v)
+		console.log("n", camera1.n)
+
+		if (camera1.vrp[2] < -4){
+			teddybear.draw()
+
+			teddybear.tz = teddy;
+			teddybear.updateModelMatrix();
+
+			teddy += .07;
+		}
     });  //10fps
 }
 

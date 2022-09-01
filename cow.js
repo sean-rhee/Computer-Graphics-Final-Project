@@ -48,6 +48,7 @@ class Cow3D extends Drawable {
 
             var smf_file = loadFileAJAX(fname); 
             var lines = smf_file.split('\n');
+            console.log("hello")
             for (var line = 0; line < lines.length; line++) {
                 var strings = lines[line].trimRight().split(' ');
                 switch (strings[0]) {
