@@ -149,7 +149,7 @@ window.onload = function init() {
 	var spec = vec4(0.5, 1.0, 1.0, 1.0);
 	var shine = 100.0
 	tri = new Plane(pos[0], pos[1], pos[2], scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
-	skybox = new Skybox(pos[0], pos[1] + 5, pos[2], scale + 3, rot[0] + 90, rot[1], rot[2], amb, dif, spec, shine);
+	skybox = new Skybox(pos[0], pos[1], pos[2], scale + 3, rot[0], rot[1]+90, rot[2], amb, dif, spec, shine);
 	cylinder = new Cylinder(pos[0], pos[1] + 5, pos[2], scale*.1, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 
 	//Messy lighting LOL
@@ -317,10 +317,10 @@ function render(){
 		}
 		light1.location = sunPos;
     	gl.clear( gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
-        // tri.draw();
-		gl.disable(gl.DEPTH_TEST);
+        tri.draw();
+		// gl.disable(gl.DEPTH_TEST);
 		skybox.draw();
-		gl.enable(gl.DEPTH_TEST);
+		// gl.enable(gl.DEPTH_TEST);
 
 		subdividedPlane.draw();
 		// subdividedPlane2.draw();

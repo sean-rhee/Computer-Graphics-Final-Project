@@ -1,21 +1,32 @@
 class Skybox extends Drawable {
     static vertexPositions = [
-        vec3(-1, 2, 0),
-        vec3(1, 2, 0),
-        vec3(1, 0, 0),
-        vec3(-1, 0, 0),
+        vec3(-10, -10, 10),
+        vec3(-10, 10, 10),
+        vec3(10, 10, 10),
+        vec3(10, -10, 10),
+        vec3(-10, -10, -10),
+        vec3(-10, 10, -10),
+        vec3(10, 10, -10),
+        vec3(10, -10, -10)
     ];
 
     static vertexTextureCoords = [
-        vec2(0, 0),
-        vec2(1, 0),
-        vec2(1, 1),
-        vec2(0, 1),
+
     ];
 
     static indices = [
-        0, 1, 2,
-        0, 2, 3
+        0, 3, 2,
+        0, 2, 1,
+        2, 3, 7,
+        2, 7, 6,
+        0, 4, 7,
+        0, 7, 3,
+        1, 2, 6,
+        1, 6, 5,
+        4, 5, 6,
+        4, 6, 7,
+        0, 1, 5,
+        0, 5, 4
     ];
 
     static positionBuffer = -1;
@@ -35,7 +46,20 @@ class Skybox extends Drawable {
 
 
     static initialize() {
-        Skybox.shaderProgram = initShaders(gl, "/vshader.glsl", "/fshader.glsl");
+        for (let i = 0; i < Skybox.vertexPositions.size; i++) {
+            Skybox.indices.push(i);
+        }
+        for (let i = 0; i < 6; i++) {
+            Skybox.vertexTextureCoords.push(vec3(-1, -1, 1))
+            Skybox.vertexTextureCoords.push(vec3(-1, 1, 1))
+            Skybox.vertexTextureCoords.push(vec3(1, 1, 1))
+            Skybox.vertexTextureCoords.push(vec3(1, -1, 1))
+            Skybox.vertexTextureCoords.push(vec3(-1, -1, -1))
+            Skybox.vertexTextureCoords.push(vec3(-1, 1, -1))
+            Skybox.vertexTextureCoords.push(vec3(1, 1, -1))
+            Skybox.vertexTextureCoords.push(vec3(1, -1, -1))
+        }
+        Skybox.shaderProgram = initShaders(gl, "/vshaderSkybox.glsl", "/fshaderSkybox.glsl");
 
         // Load the data into the GPU
         Skybox.positionBuffer = gl.createBuffer();
@@ -64,28 +88,48 @@ class Skybox extends Drawable {
 
     static initializeTexture() {
         var image = new Image();
+        var image2 = new Image();
+        var image3 = new Image();
+        var image4 = new Image();
+        var image5 = new Image();
+        var image6 = new Image();
 
-        image.onload = function () {
+        image6.onload = function () {
             Skybox.texture = gl.createTexture();
-            gl.bindTexture(gl.TEXTURE_2D, Skybox.texture);
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, image.width, image.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
+            gl.bindTexture(gl.TEXTURE_CUBE_MAP, Skybox.texture);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_Y, 0, gl.RGB, image.width, image.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, gl.RGB, image2.width, image2.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image2);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_X, 0, gl.RGB, image3.width, image3.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image3);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_X, 0, gl.RGB, image4.width, image4.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image4);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_POSITIVE_Z, 0, gl.RGB, image5.width, image5.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image5);
+            gl.texImage2D(gl.TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, gl.RGB, image6.width, image6.height, 0, gl.RGB, gl.UNSIGNED_BYTE, image6);
 
-            gl.generateMipmap(gl.TEXTURE_2D);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST);
-            gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            // gl.generateMipmap(gl.TEXTURE_2D);
+            // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST_MIPMAP_NEAREST);
+            // gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+            gl.texParameteri(gl.TEXTURE_CUBE_MAP, gl.TEXTURE_WRAP_R, gl.CLAMP_TO_EDGE);
 
         }
 
-        image.src = "night_skybox_top.png";
+        image.src = "./skybox/top.png";
+        image2.src = "./skybox/bottom.png";
+        image3.src = "./skybox/right.png";
+        image4.src = "./skybox/left.png";
+        image5.src = "./skybox/front.png";
+        image6.src = "./skybox/back.png";
     }
 
     constructor(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh) {
         super(tx, ty, tz, scale, rotX, rotY, rotZ, amb, dif, sp, sh);
         var size = 5;
         if (Skybox.shaderProgram == -1) {
-            for (let i = 0; i < Skybox.vertexPositions.length; i++) {
-                Skybox.indices.push(i);
-            }
+            // for (let i = 0; i < Skybox.vertexPositions.length; i++) {
+            //     Skybox.indices.push(i);
+            // }
             Skybox.initialize()
             Skybox.initializeTexture();
         }
@@ -102,10 +146,10 @@ class Skybox extends Drawable {
         gl.vertexAttribPointer(Skybox.aPositionShader, 3, gl.FLOAT, false, 0, 0);
 
         gl.bindBuffer(gl.ARRAY_BUFFER, Skybox.textureCoordBuffer);
-        gl.vertexAttribPointer(Skybox.aTextureCoordShader, 2, gl.FLOAT, false, 0, 0);
+        gl.vertexAttribPointer(Skybox.aTextureCoordShader, 3, gl.FLOAT, false, 0, 0);
 
         gl.activeTexture(gl.TEXTURE0);
-        gl.bindTexture(gl.TEXTURE_2D, Skybox.texture);
+        gl.bindTexture(gl.TEXTURE_CUBE_MAP, Skybox.texture);
         gl.uniform1i(Skybox.uTextureUnitShader, 0);
 
 
