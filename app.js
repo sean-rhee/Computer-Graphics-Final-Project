@@ -79,7 +79,7 @@ class Camera{
 	}
 }
 
-var camera1 = new Camera(vec3(0, 2, 5), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1));
+var camera1 = new Camera(vec3(0, 2, 4), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1));
 var camera2 = new Camera(vec3(-4.5, 3.5, 3), normalize(vec3(1, 0, 1)), normalize(vec3(0, 1, -1)), vec3(0, 0, 1));
 // var light1 = new Light(vec3(0, 0, 0), vec3(0, 1, -1), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 0, 0, 1);
 var light1 = new Light(vec3(10, 0, 0), vec3(-1, 0, 0), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 0), 0, 0, 1);
@@ -131,6 +131,7 @@ var skybox;
 var creepyWall1, creepyWall2, creepyWall3, creepyWall4;
 var door1, door2;
 var cylinder;
+var grassPlane;
 
 window.onload = function init() {
 	canvas = document.getElementById("gl-canvas");
@@ -150,11 +151,11 @@ window.onload = function init() {
 	var shine = 100.0
 	tri = new Plane(pos[0], pos[1], pos[2], scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 	skybox = new Skybox(pos[0], pos[1], pos[2], scale + 3, rot[0], rot[1]+90, rot[2], amb, dif, spec, shine);
-	cylinder = new Cylinder(pos[0], pos[1] + 5, pos[2], scale*.1, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+	cylinder = new Cylinder(pos[0]+3, pos[1] + 1, pos[2], scale*.1, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 
 	//Messy lighting LOL
 	subdividedPlane = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] , scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
-	subdividedPlane2 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 2, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
+	subdividedPlane2 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 2, scale*.2, rot[0], rot[1]+45, rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
 	subdividedPlane3 = new SubdividedPlane(pos[0] , pos[1] + .1, pos[2] + 3, scale*.2, rot[0], rot[1], rot[2], vec4(0.2, 0.2, 0.2, 1.0), vec4(0.6, 0.1, 0.0, 1.0), vec4(1.0, 1.0, 1.0, 1.0), 1);
 	// subdividedPlane4 = new SubdividedPlane(pos[0] + 6, pos[1] + .1, pos[2] - 5, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
 	// subdividedPlane5 = new SubdividedPlane(pos[0] + 8.75, pos[1] + .1, pos[2] + 5.5, scale, rot[0], rot[1] - 90, rot[2], amb, dif, spec, shine);
@@ -179,12 +180,16 @@ window.onload = function init() {
 	BackWall1 = new CreepyWall(pos[0]-2.5,pos[1],pos[2]-4,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 	BackWall2 = new CreepyWall(pos[0]+2.5,pos[1],pos[2]-4,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 
+	FrontWall = new CreepyWall(pos[0],pos[1],pos[2]+5,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine)
+
 	cow = new Cow3D(pos[0]-3,pos[1]+1,pos[2]+1,3,0,0,0,"./cow")
 	teddybear = new TeddyBear3D(pos[0]-.25,pos[1]+1.5,pos[2]-10,.05,0,0,0,"./teddybear")
 
 	door1 = new Door3D(pos[0]-1.5,pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 	door2 = new Door3D(pos[0]+1.5,pos[1],pos[2],scale,rot[0],rot[1]-180,rot[2],amb,dif,spec,shine);
 	door3 = new Door3D(pos[0],pos[1],pos[2]-4,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+
+	grassPlane = new GrassPlane(pos[0], pos[1], pos[2]-10, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine)
     
     render();
 };
@@ -277,15 +282,15 @@ function render(){
     setTimeout(function(){
 	requestAnimationFrame(render);
 		if (day) {
-			sunX -= .1;
-			sunY += .1;
+			sunX -= .25;
+			sunY += .25;
 			if (sunX == 0) {
 				day = false;
 			}
 		}
 		else {
-			sunX += .1;
-			sunY += .1;
+			sunX += .25;
+			sunY += .25;
 			if (sunX >= 4) {
 				day = true;
 				sunY = 1;
@@ -358,6 +363,7 @@ function render(){
 		LeftRoof.draw();
 		BackWall1.draw();
 		BackWall2.draw();
+		FrontWall.draw();
 
 		// console.log("vrp", camera1.vrp)
 		// console.log("u", camera1.u)
@@ -378,6 +384,8 @@ function render(){
 			door3.tz -= .0275;
 			door3.updateModelMatrix();
 		}
+
+		grassPlane.draw();
     });  //10fps
 }
 
