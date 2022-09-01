@@ -145,10 +145,24 @@ window.onload = function init(){
     var shine = 100.0
     tri = new Plane(pos[0],pos[1],pos[2],scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 	skybox = new Skybox(pos[0],pos[1]+5,pos[2],scale+3,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
-	creepyWall1 = new CreepyWall(pos[0]-1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
-	creepyWall2 = new CreepyWall(pos[0]+1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
-	creepyWall3 = new CreepyWall(pos[0]+1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
-	creepyWall4 = new CreepyWall(pos[0]-1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+
+
+	//Left Walls
+	LeftDoorLeftWall = new CreepyWall(pos[0]-1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	LeftDoorRightWall = new CreepyWall(pos[0]-1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	LeftBackWall = new CreepyWall(pos[0]-5,pos[1],pos[2]+1,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	LeftRightWall = new CreepyWall(pos[0]-3,pos[1],pos[2]-1,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine); 
+	LeftLeftWall = new CreepyWall(pos[0]-3,pos[1],pos[2]+3,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine);
+	LeftRoof = new CreepyWall(pos[0]-3,pos[1]+4,pos[2]-1,scale+1,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
+
+	//Right Walls 
+	RightDoorRightWall = new CreepyWall(pos[0]+1,pos[1],pos[2]+3,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	RightDoorLeftWall = new CreepyWall(pos[0]+1,pos[1],pos[2]-2,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	RightBackWall = new CreepyWall(pos[0]+5,pos[1],pos[2]+1,scale+1,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
+	RightRightWall = new CreepyWall(pos[0]+3,pos[1],pos[2]-1,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine); 
+	RightLeftWall = new CreepyWall(pos[0]+3,pos[1],pos[2]+3,scale+1,rot[0],rot[1],rot[2],amb,dif,spec,shine); 
+	RightRoof = new CreepyWall(pos[0]+3,pos[1]+4,pos[2]-1,scale+1,rot[0]+90,rot[1],rot[2],amb,dif,spec,shine);
+
 	door1 = new Door3D(pos[0]-1,pos[1],pos[2]+.5,scale,rot[0],rot[1]+90,rot[2],amb,dif,spec,shine);
 	door2 = new Door3D(pos[0]+1,pos[1],pos[2]+.5,scale,rot[0],rot[1]-90,rot[2],amb,dif,spec,shine);
     
@@ -171,16 +185,16 @@ function moveCamera(event) {
 			camera1.moveX(0.3);
 			break;
 		case "ArrowLeft":
-			camera1.lookHorizontal(1);
+			camera1.lookHorizontal(2);
 			break;
 		case "ArrowRight":
-			camera1.lookHorizontal(-1);
+			camera1.lookHorizontal(-2);
 			break;
 		case "ArrowUp":
-			camera1.lookVertical(-1);
+			camera1.lookVertical(-2);
 			break;
 		case "ArrowDown":
-			camera1.lookVertical(1);
+			camera1.lookVertical(2);
 			break;
 		case "ShiftLeft":
 			camera1.moveZ(-0.3);
@@ -206,12 +220,24 @@ function render(){
 		gl.disable(gl.DEPTH_TEST);
 		skybox.draw();
 		gl.enable(gl.DEPTH_TEST);
-		creepyWall1.draw();
-		creepyWall2.draw();
+
 		door1.draw();
 		door2.draw();
-		creepyWall3.draw();
-		creepyWall4.draw();
+
+
+		RightLeftWall.draw();
+		RightRightWall.draw();
+		RightBackWall.draw();
+		RightDoorLeftWall.draw();
+		RightDoorRightWall.draw();
+		RightRoof.draw();
+
+		LeftDoorRightWall.draw();
+		LeftDoorLeftWall.draw();
+		LeftBackWall.draw();
+		LeftRightWall.draw();
+		LeftLeftWall.draw();
+		LeftRoof.draw();
     }, 100 );  //10fps
 }
 
