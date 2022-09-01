@@ -91,9 +91,6 @@ class Plane extends Drawable {
             for (let i = 0; i < Plane.vertexPositions.length; i++) {
                 Plane.indices.push(i);
             }
-            console.log(Plane.vertexPositions);
-            console.log(Plane.vertexTextureCoords);
-            console.log(Plane.indices);
             Plane.initialize()
             Plane.initializeTexture();
         }

@@ -1,10 +1,9 @@
 #version 300 es
 in vec3 aPosition;
 in vec3 aNormal;
-in vec2 aTextureCoord;
+in vec4 aColor;
 
 out vec4 vColor;
-out vec2 aTextureCoord;
 
 uniform mat4 modelMatrix, cameraMatrix, projectionMatrix;
 
@@ -85,5 +84,4 @@ void main()
     }
 
     vColor = lcolor1 + lcolor2;
-    vTextureCoord = aTextureCoord;
 }

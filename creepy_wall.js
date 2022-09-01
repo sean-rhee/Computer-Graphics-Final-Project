@@ -13,7 +13,7 @@ class CreepyWall extends Drawable {
         vec2(0, 1),
     ];
 
-    vertexNormals = []
+    static vertexNormals = []
 
     static indices = [
         0, 1, 2,
