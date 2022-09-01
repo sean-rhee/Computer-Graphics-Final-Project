@@ -217,15 +217,18 @@ function moveCamera(event) {
 				break;
 			case "ArrowUp":
 				camera1.lookVertical(-2);
+				event.preventDefault();
 				break;
 			case "ArrowDown":
 				camera1.lookVertical(2);
+				event.preventDefault();
 				break;
 			case "ShiftLeft":
 				camera1.moveZ(-0.3);
 				break;
 			case "Space":
 				camera1.moveZ(0.3);
+				event.preventDefault();
 				break;
 			case "KeyZ":
 				camera1.roll(-1);
@@ -274,15 +277,15 @@ function render(){
     setTimeout(function(){
 	requestAnimationFrame(render);
 		if (day) {
-			sunX -= 1;
-			sunY += 1;
+			sunX -= .1;
+			sunY += .1;
 			if (sunX == 0) {
 				day = false;
 			}
 		}
 		else {
-			sunX += 1;
-			sunY += 1;
+			sunX += .1;
+			sunY += .1;
 			if (sunX >= 4) {
 				day = true;
 				sunY = 1;
