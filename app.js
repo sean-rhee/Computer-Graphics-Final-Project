@@ -80,7 +80,7 @@ class Camera{
 }
 
 var camera1 = new Camera(vec3(0, 2, 4), vec3(1, 0, 0), vec3(0, 1, 0), vec3(0, 0, 1));
-var camera2 = new Camera(vec3(-4.5, 3.5, 3), normalize(vec3(1, 0, 1)), normalize(vec3(0, 1, -1)), vec3(0, 0, 1));
+var camera2 = new Camera(vec3(-4.5, 3.5, 3), normalize(vec3(1, 0, 1)), normalize(vec3(0, 1, -.5)), vec3(0, 0, 1));
 // var light1 = new Light(vec3(0, 0, 0), vec3(0, 1, -1), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 0, 0, 1);
 var light1 = new Light(vec3(10, 0, 0), vec3(-1, 0, 0), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 0), 0, 0, 1);
 var light2 = new Light(vec3(0, 2, 5), normalize(vec3(0, -1, -1)), vec4(0.4, 0.4, 0.4, 1.0), vec4(1, 1, 1, 1), vec4(1, 1, 1, 1), 15, (30 * Math.PI) / 180,1);
