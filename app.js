@@ -132,6 +132,7 @@ var creepyWall1, creepyWall2, creepyWall3, creepyWall4;
 var door1, door2;
 var cylinder;
 var grassPlane;
+var box;
 
 window.onload = function init() {
 	canvas = document.getElementById("gl-canvas");
@@ -189,7 +190,11 @@ window.onload = function init() {
 	door2 = new Door3D(pos[0]+1.5,pos[1],pos[2],scale,rot[0],rot[1]-180,rot[2],amb,dif,spec,shine);
 	door3 = new Door3D(pos[0],pos[1],pos[2]-4,scale,rot[0],rot[1],rot[2],amb,dif,spec,shine);
 
-	grassPlane = new GrassPlane(pos[0], pos[1], pos[2]-10, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine)
+	grassPlane = new GrassPlane(pos[0], pos[1], pos[2]-10, scale, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+	box = new Box(pos[0]+2, pos[1]+1, pos[2]-9, scale*.05, rot[0], rot[1], rot[2], amb, dif, spec, shine);
+	box2 = new Box(pos[0]+2, pos[1]+2, pos[2]-9, scale*.05, rot[0], rot[1], rot[2], amb, dif, spec, shine)
+	box3 = new Box(pos[0]-3, pos[1]+1, pos[2]-8, scale*.05, rot[0], rot[1], rot[2], amb, dif, spec, shine)
+	box4 = new Box(pos[0]-3, pos[1]+1, pos[2]-7, scale*.05, rot[0], rot[1], rot[2], amb, dif, spec, shine)
     
     render();
 };
@@ -347,6 +352,8 @@ function render(){
 		cow.updateModelMatrix();
 
 		cylinder.draw();
+		cylinder.modelRotationZ = theta*5;
+		cylinder.updateModelMatrix();
 
 		RightLeftWall.draw();
 		RightRightWall.draw();
@@ -386,6 +393,10 @@ function render(){
 		}
 
 		grassPlane.draw();
+		box.draw();
+		box2.draw();
+		box3.draw();
+		box4.draw();
     });  //10fps
 }
 
