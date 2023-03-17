@@ -1,1 +1,1 @@
-# CS432-Final-Project
+# Computer-Graphics-Final-Project
